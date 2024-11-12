@@ -4,8 +4,17 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 function Dashboard() {
-  const token = localStorage.getItem("token");
   const [courses, setCourses] = useState([]);
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    try {
+      const token = localStorage.getItem("token");
+      if (token) setToken(token);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   const fetchCourses = async () => {
     try {
@@ -13,7 +22,7 @@ function Dashboard() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearering ${token}`,
+          Authorization: `Bearering ${token}`,
         },
       });
       const result = await response.json();

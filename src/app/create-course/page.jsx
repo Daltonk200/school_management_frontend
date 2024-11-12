@@ -8,11 +8,20 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 const Page = () => {
-    const token = localStorage.getItem("token");
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [token, setToken] = useState(false);
+
+  useEffect(() => {
+    try {
+      const token = localStorage.getItem("token");
+      if(token) setToken(token);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   const courseOptions = [
     "Graphic Design",
@@ -32,23 +41,24 @@ const Page = () => {
       const response = await fetch("http://localhost:5000/api/courses", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearering ${token}`,
-          },
+          "Content-Type": "application/json",
+          Authorization: `Bearering ${token}`,
+        },
         body: JSON.stringify(newCourse),
       });
 
       const data = await response.json();
       console.log(data);
-      
 
       if (response.ok) {
         toast.success("Course added successfully!");
         setTitle("");
         setDescription("");
-        router.push("/dashboard");  
+        router.push("/dashboard");
       } else {
-        toast.error(`Failed to add course: ${data.error || "something went wrong"}`);
+        toast.error(
+          `Failed to add course: ${data.error || "something went wrong"}`
+        );
       }
     } catch (error) {
       toast.error("Failed to add course. Please try again.");
@@ -59,12 +69,9 @@ const Page = () => {
 
   return (
     <div className="">
+      <div className=""></div>
       <div className="">
-      </div>
-      <div className="">
-        <div className="">
-          
-        </div>
+        <div className=""></div>
         <div className="">
           <div className="">
             <h1 className="text-center mb-1">Add Course</h1>
@@ -96,7 +103,11 @@ const Page = () => {
                 required
               />
 
-              <button className="bg-blue-400 mt-4 p-4" type="submit" disabled={isLoading}>
+              <button
+                className="bg-blue-400 mt-4 p-4"
+                type="submit"
+                disabled={isLoading}
+              >
                 {isLoading ? "Submitting..." : "Submit"}
               </button>
             </form>

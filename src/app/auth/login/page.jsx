@@ -27,7 +27,7 @@ function Page() {
       email,
       password,
     };
-
+  
     try {
       const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
@@ -36,14 +36,18 @@ function Page() {
         },
         body: JSON.stringify(userData),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         if (data.token) {
-          localStorage.setItem("token", data.token);
-          toast.success("Login successful!");
-          router.push("/dashboard");
+          try {
+              localStorage.setItem("token", data.token);
+            toast.success("Login successful!");
+            router.push("/dashboard");
+          } catch (storageError) {
+            console.error("Failed to save token to localStorage:", storageError);
+          }
         }
       } else {
         setError(data.message || "Login failed. Please check your credentials.");
@@ -55,6 +59,7 @@ function Page() {
       toast.error("An error occurred. Please try again later.");
     }
   };
+  
 
   return (
     <section className="">

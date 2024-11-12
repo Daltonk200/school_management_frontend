@@ -3,8 +3,8 @@ import React, { useState } from "react";
 // import style from './page.module.css';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Notyf } from 'notyf';
-import 'notyf/notyf.min.css';
+import { toast } from "sonner";
+
 
 function Page() {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,8 +13,8 @@ function Page() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  // Initialize Notyf instance
-  const notyf = new Notyf();
+  // Initialize toast instance
+  // const toast = new toast();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -42,17 +42,17 @@ function Page() {
       if (response.ok) {
         if (data.token) {
           localStorage.setItem("token", data.token);
-          notyf.success("Login successful!");
+          toast.success("Login successful!");
           router.push("/dashboard");
         }
       } else {
         setError(data.message || "Login failed. Please check your credentials.");
-        notyf.error(data.message || "Login failed. Please check your credentials.");
+        toast.error(data.message || "Login failed. Please check your credentials.");
       }
     } catch (error) {
       console.error("An error occurred:", error);
       setError("An error occurred. Please try again later.");
-      notyf.error("An error occurred. Please try again later.");
+      toast.error("An error occurred. Please try again later.");
     }
   };
 

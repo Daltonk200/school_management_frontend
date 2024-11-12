@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 // import styles from "./page.module.css";
 // import Sidebar from "@/components/Sidebar/Sidebar";
 // import Navbar from "@/components/Navbar/Navbar";
-import { Notyf } from "notyf";
-import "notyf/notyf.min.css";
+
+import { toast } from "sonner";
 
 const Page = () => {
     const token = localStorage.getItem("token");
@@ -25,7 +25,6 @@ const Page = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    const notyf = new Notyf({ position: { x: "right", y: "top" }, duration: 3000 });
 
     const newCourse = { title, description };
 
@@ -44,15 +43,15 @@ const Page = () => {
       
 
       if (response.ok) {
-        notyf.success("Course added successfully!");
+        toast.success("Course added successfully!");
         setTitle("");
         setDescription("");
         router.push("/dashboard");  
       } else {
-        notyf.error(`Failed to add course: ${data.error || "something went wrong"}`);
+        toast.error(`Failed to add course: ${data.error || "something went wrong"}`);
       }
     } catch (error) {
-      notyf.error("Failed to add course. Please try again.");
+      toast.error("Failed to add course. Please try again.");
     } finally {
       setIsLoading(false);
     }
